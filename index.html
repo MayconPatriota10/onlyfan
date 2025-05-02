@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AmadoresVazados +18</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">AmadoresVazados +18</h1>
+      <div>
+        <button id="loginBtn" class="mr-4 hover:underline">Login</button>
+        <button id="signupBtn" class="hover:underline">Inscrever-se</button>
+        <button id="logoutBtn" class="hover:underline hidden">Sair</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mx-auto mt-8 px-4">
+    <!-- Welcome Section -->
+    <section id="welcomeSection" class="text-center">
+      <h2 class="text-3xl font-bold mb-4">Bem-vindo ao AmadoresVazados +18</h2>
+      <p class="text-lg mb-6">Acesse conteúdos exclusivos ou compartilhe suas criações com seus fãs!</p>
+      <button id="exploreBtn" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Explorar Conteúdos</button>
+    </section>
+
+    <!-- Content Section -->
+    <section id="contentSection" class="mt-12 hidden">
+      <h2 class="text-2xl font-bold mb-4">Conteúdos Disponíveis</h2>
+      <div id="contentList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- Purchased Content Section -->
+    <section id="purchasedSection" class="mt-12 hidden">
+      <h2 class="text-2xl font-bold mb-4">Meus Conteúdos Comprados</h2>
+      <div id="purchasedList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- Creator Section -->
+    <section id="creatorSection" class="mt-12 hidden">
+      <h2 class="text-2xl font-bold mb-4">Adicionar Novo Conteúdo</h2>
+      <div class="bg-white p-6 rounded shadow">
+        <input id="contentTitle" type="text" placeholder="Título do Conteúdo" class="w-full p-2 mb-4 border rounded">
+        <textarea id="contentDescription" placeholder="Descrição" class="w-full p-2 mb-4 border rounded"></textarea>
+        <input id="contentPrice" type="number" placeholder="Preço (R$)" class="w-full p-2 mb-4 border rounded">
+        <input id="contentMedia" type="file" accept="image/*,video/*" class="w-full p-2 mb-4 border rounded">
+        <button id="addContentBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Adicionar Conteúdo</button>
+      </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded shadow w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4">Login</h2>
+        <input id="loginEmail" type="email" placeholder="Email" class="w-full p-2 mb-4 border rounded">
+        <input id="loginPassword" type="password" placeholder="Senha" class="w-full p-2 mb-4 border rounded">
+        <select id="loginRole" class="w-full p-2 mb-4 border rounded">
+          <option value="fan">Fã</option>
+          <option value="creator">Criador</option>
+        </select>
+        <button id="submitLogin" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Entrar</button>
+        <button id="closeLogin" class="mt-2 text-gray-600 hover:underline w-full">Fechar</button>
+      </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded shadow w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4">Inscrever-se</h2>
+        <input id="signupEmail" type="email" placeholder="Email" class="w-full p-2 mb-4 border rounded">
+        <input id="signupPassword" type="password" placeholder="Senha" class="w-full p-2 mb-4 border rounded">
+        <select id="signupRole" class="w-full p-2 mb-4 border rounded">
+          <option value="fan">Fã</option>
+          <option value="creator">Criador</option>
+        </select>
+        <button id="submitSignup" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Criar Conta</button>
+        <button id="closeSignup" class="mt-2 text-gray-600 hover:underline w-full">Fechar</button>
+      </div>
+    </div>
+
+    <!-- Content View Modal -->
+    <div id="contentViewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded shadow w-full max-w-2xl">
+        <h2 id="viewTitle" class="text-xl font-bold mb-4"></h2>
+        <p id="viewDescription" class="text-gray-600 mb-4"></p>
+        <div id="viewMedia" class="mb-4"></div>
+        <button id="closeView" class="mt-2 text-gray-600 hover:underline w-full">Fechar</button>
+      </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded shadow w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4">Confirmar Pagamento</h2>
+        <p id="paymentAmount" class="text-gray-600 mb-4"></p>
+        <select id="paymentMethodSelect" class="w-full p-2 mb-4 border rounded">
+          <option value="card">Cartão</option>
+          <option value="pix">Pix</option>
+        </select>
+        <div id="cardInput" class="mb-4">
+          <input id="cardNumber" type="text" placeholder="Número do cartão (simulado)" class="w-full p-2 border rounded">
+        </div>
+        <div id="pixInstructions" class="mb-4 hidden">
+          <p class="text-gray-600">Envie o pagamento via Pix para a chave:</p>
+          <p class="font-semibold text-blue-600">diogo@gmail.com</p>
+          <p class="text-gray-600 text-sm">Após enviar, clique em "Confirmar Pagamento".</p>
+        </div>
+        <button id="submitPayment" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Confirmar Pagamento</button>
+        <button id="closePayment" class="mt-2 text-gray-600 hover:underline w-full">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mock user, content, and purchased data
+    let currentUser = null;
+    let contents = JSON.parse(localStorage.getItem('contents')) || [];
+    let purchasedContents = JSON.parse(localStorage.getItem('purchasedContents')) || [];
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    // DOM Elements
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const loginModal = document.getElementById('loginModal');
+    const signupModal = document.getElementById('signupModal');
+    const welcomeSection = document.getElementById('welcomeSection');
+    const contentSection = document.getElementById('contentSection');
+    const purchasedSection = document.getElementById('purchasedSection');
+    const creatorSection = document.getElementById('creatorSection');
+    const contentList = document.getElementById('contentList');
+    const purchasedList = document.getElementById('purchasedList');
+    const addContentBtn = document.getElementById('addContentBtn');
+    const contentViewModal = document.getElementById('contentViewModal');
+    const paymentModal = document.getElementById('paymentModal');
+    const paymentAmount = document.getElementById('paymentAmount');
+    const paymentMethodSelect = document.getElementById('paymentMethodSelect');
+    const cardInput = document.getElementById('cardInput');
+    const pixInstructions = document.getElementById('pixInstructions');
+    const submitPayment = document.getElementById('submitPayment');
+    const closePayment = document.getElementById('closePayment');
+
+    // Modal Controls
+    loginBtn.addEventListener('click', () => {
+      console.log('Botão Login clicado');
+      loginModal.classList.remove('hidden');
+    });
+    signupBtn.addEventListener('click', () => {
+      console.log('Botão Inscrever-se clicado');
+      signupModal.classList.remove('hidden');
+    });
+    document.getElementById('closeLogin').addEventListener('click', () => {
+      console.log('Botão Fechar Login clicado');
+      loginModal.classList.add('hidden');
+    });
+    document.getElementById('closeSignup').addEventListener('click', () => {
+      console.log('Botão Fechar Signup clicado');
+      signupModal.classList.add('hidden');
+    });
+    document.getElementById('closeView').addEventListener('click', () => {
+      console.log('Botão Fechar View clicado');
+      contentViewModal.classList.add('hidden');
+    });
+    closePayment.addEventListener('click', () => {
+      console.log('Botão Cancelar Pagamento clicado');
+      paymentModal.classList.add('hidden');
+    });
+
+    // Signup
+    document.getElementById('submitSignup').addEventListener('click', () => {
+      console.log('Botão Criar Conta clicado');
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value.trim();
+      const role = document.getElementById('signupRole').value;
+      if (email && password && role) {
+        if (users.some(user => user.email === email)) {
+          alert('Este email já está registrado!');
+          console.log('Email já registrado:', email);
+          return;
+        }
+        users.push({ email, password, role });
+        localStorage.setItem('users', JSON.stringify(users));
+        console.log('Usuário cadastrado:', { email, role });
+        console.log('Lista de usuários:', users);
+        alert('Conta criada com sucesso! Faça login para continuar.');
+        signupModal.classList.add('hidden');
+        loginModal.classList.remove('hidden');
+      } else {
+        alert('Preencha todos os campos!');
+        console.log('Campos incompletos no signup:', { email, password, role });
+      }
+    });
+
+    // Login
+    function setupLoginEvent() {
+      const submitLogin = document.getElementById('submitLogin');
+      if (submitLogin) {
+        submitLogin.addEventListener('click', () => {
+          console.log('Botão Entrar clicado');
+          const email = document.getElementById('loginEmail').value.trim();
+          const password = document.getElementById('loginPassword').value.trim();
+          const role = document.getElementById('loginRole').value;
+          console.log('Tentativa de login:', { email, password, role });
+          console.log('Lista de usuários atual:', users);
+
+          if (!email || !password || !role) {
+            alert('Preencha todos os campos!');
+            console.log('Campos incompletos no login:', { email, password, role });
+            return;
+          }
+
+          // Verifica se users está inicializado
+          if (!Array.isArray(users)) {
+            users = [];
+            localStorage.setItem('users', JSON.stringify(users));
+            console.log('Lista de usuários reinicializada:', users);
+          }
+
+          const user = users.find(u => u.email === email && u.password === password && u.role === role);
+          if (user) {
+            currentUser = { email, role };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            console.log('Login bem-sucedido:', currentUser);
+            updateUI();
+            loginModal.classList.add('hidden');
+            alert(`Login bem-sucedido como ${role}!`);
+          } else {
+            alert('Email, senha ou papel incorretos. Verifique suas credenciais ou crie uma conta.');
+            console.log('Falha no login: usuário não encontrado ou credenciais incorretas');
+          }
+        });
+      } else {
+        console.error('Elemento submitLogin não encontrado');
+      }
+    }
+
+    // Chama a função para configurar o evento de login
+    setupLoginEvent();
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      console.log('Botão Sair clicado');
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      updateUI();
+    });
+
+    // Add Content
+    addContentBtn.addEventListener('click', () => {
+      console.log('Botão Adicionar Conteúdo clicado');
+      const title = document.getElementById('contentTitle').value;
+      const description = document.getElementById('contentDescription').value;
+      const price = document.getElementById('contentPrice').value;
+      const mediaFile = document.getElementById('contentMedia').files[0];
+      if (title && description && price && mediaFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const mediaData = e.target.result;
+          const mediaType = mediaFile.type.startsWith('image') ? 'image' : 'video';
+          contents.push({ id: Date.now(), title, description, price, creator: currentUser.email, media: mediaData, mediaType });
+          localStorage.setItem('contents', JSON.stringify(contents));
+          renderContents();
+          document.getElementById('contentTitle').value = '';
+          document.getElementById('contentDescription').value = '';
+          document.getElementById('contentPrice').value = '';
+          document.getElementById('contentMedia').value = '';
+          console.log('Conteúdo adicionado:', { title, description, price });
+        };
+        reader.readAsDataURL(mediaFile);
+      } else {
+        alert('Preencha todos os campos e selecione uma mídia!');
+        console.log('Campos incompletos no adicionar conteúdo:', { title, description, price, mediaFile });
+      }
+    });
+
+    // Explore Contents
+    document.getElementById('exploreBtn').addEventListener('click', () => {
+      console.log('Botão Explorar Conteúdos clicado');
+      if (currentUser && currentUser.role === 'fan') {
+        welcomeSection.classList.add('hidden');
+        contentSection.classList.remove('hidden');
+        purchasedSection.classList.remove('hidden');
+        renderContents();
+        renderPurchasedContents();
+        console.log('Conteúdos exibidos para fã:', currentUser);
+      } else {
+        alert('Você precisa estar logado como fã para explorar conteúdos!');
+        loginModal.classList.remove('hidden');
+        console.log('Acesso negado: usuário não é fã ou não está logado');
+      }
+    });
+
+    // Payment Method Toggle
+    paymentMethodSelect.addEventListener('change', () => {
+      console.log('Método de pagamento alterado:', paymentMethodSelect.value);
+      if (paymentMethodSelect.value === 'pix') {
+        cardInput.classList.add('hidden');
+        pixInstructions.classList.remove('hidden');
+      } else {
+        cardInput.classList.remove('hidden');
+        pixInstructions.classList.add('hidden');
+      }
+    });
+
+    // Render Contents
+    function renderContents() {
+      contentList.innerHTML = '';
+      contents.forEach(content => {
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'bg-white p-4 rounded shadow';
+        const isPurchased = purchasedContents.some(p => p.contentId === content.id && p.userEmail === currentUser?.email);
+        contentDiv.innerHTML = `
+          <h3 class="text-lg font-bold">${content.title}</h3>
+          <p class="text-gray-600">${content.description}</p>
+          <p class="text-blue-600 font-semibold">R$${content.price}</p>
+          <p class="text-sm text-gray-500">Criado por: ${content.creator}</p>
+          ${isPurchased ? '<button class="view-content bg-green-600 text-white px-4 py-2 mt-2 rounded hover:bg-green-700" data-id="' + content.id + '">Ver Conteúdo</button>' : 
+          currentUser && currentUser.role === 'fan' ? '<button class="buy-content bg-blue-600 text-white px-4 py-2 mt-2 rounded hover:bg-blue-700" data-id="' + content.id + '" data-price="' + content.price + '">Comprar</button>' : ''}
+        `;
+        contentList.appendChild(contentDiv);
+      });
+
+      // Add event listeners for buy and view buttons
+      document.querySelectorAll('.buy-content').forEach(btn => {
+        btn.addEventListener('click', () => {
+          console.log('Botão Comprar clicado', btn.dataset.id);
+          const contentId = parseInt(btn.dataset.id);
+          const price = btn.dataset.price;
+          paymentAmount.textContent = `Valor a pagar: R$${price}`;
+          paymentModal.classList.remove('hidden');
+
+          // Handle payment submission
+          submitPayment.onclick = () => {
+            console.log('Botão Confirmar Pagamento clicado');
+            const method = paymentMethodSelect.value;
+            if (method === 'card') {
+              const cardNumber = document.getElementById('cardNumber').value;
+              if (!cardNumber) {
+                alert('Por favor, insira o número do cartão.');
+                console.log('Número do cartão não fornecido');
+                return;
+              }
+            } else if (method === 'pix') {
+              // Simula confirmação do pagamento via Pix
+              console.log('Pagamento via Pix simulado para:', 'diogo@gmail.com');
+            }
+            // Simula pagamento bem-sucedido
+            purchasedContents.push({ contentId, userEmail: currentUser.email });
+            localStorage.setItem('purchasedContents', JSON.stringify(purchasedContents));
+            paymentModal.classList.add('hidden');
+            renderContents();
+            renderPurchasedContents();
+            alert('Pagamento confirmado! Você agora tem acesso ao conteúdo.');
+            console.log('Pagamento confirmado para conteúdo:', contentId);
+          };
+        });
+      });
+
+      document.querySelectorAll('.view-content').forEach(btn => {
+        btn.addEventListener('click', () => {
+          console.log('Botão Ver Conteúdo clicado', btn.dataset.id);
+          const contentId = parseInt(btn.dataset.id);
+          const content = contents.find(c => c.id === contentId);
+          document.getElementById('viewTitle').textContent = content.title;
+          document.getElementById('viewDescription').textContent = content.description;
+          const mediaDiv = document.getElementById('viewMedia');
+          mediaDiv.innerHTML = content.mediaType === 'image' ? 
+            `<img src="${content.media}" class="w-full h-auto rounded">` : 
+            `<video src="${content.media}" class="w-full h-auto rounded" controls></video>`;
+          contentViewModal.classList.remove('hidden');
+        });
+      });
+    }
+
+    // Render Purchased Contents
+    function renderPurchasedContents() {
+      purchasedList.innerHTML = '';
+      const userPurchases = purchasedContents.filter(p => p.userEmail === currentUser?.email);
+      userPurchases.forEach(purchase => {
+        const content = contents.find(c => c.id === purchase.contentId);
+        if (content) {
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'bg-white p-4 rounded shadow';
+          contentDiv.innerHTML = `
+            <h3 class="text-lg font-bold">${content.title}</h3>
+            <p class="text-gray-600">${content.description}</p>
+            <button class="view-content bg-green-600 text-white px-4 py-2 mt-2 rounded hover:bg-green-700" data-id="${content.id}">Ver Conteúdo</button>
+          `;
+          purchasedList.appendChild(contentDiv);
+        }
+      });
+
+      document.querySelectorAll('.view-content').forEach(btn => {
+        btn.addEventListener('click', () => {
+          console.log('Botão Ver Conteúdo (comprado) clicado', btn.dataset.id);
+          const contentId = parseInt(btn.dataset.id);
+          const content = contents.find(c => c.id === contentId);
+          document.getElementById('viewTitle').textContent = content.title;
+          document.getElementById('viewDescription').textContent = content.description;
+          const mediaDiv = document.getElementById('viewMedia');
+          mediaDiv.innerHTML = content.mediaType === 'image' ? 
+            `<img src="${content.media}" class="w-full h-auto rounded">` : 
+            `<video src="${content.media}" class="w-full h-auto rounded" controls></video>`;
+          contentViewModal.classList.remove('hidden');
+        });
+      });
+    }
+
+    // Update UI based on user state
+    function updateUI() {
+      console.log('Atualizando UI, currentUser:', currentUser);
+      if (currentUser) {
+        loginBtn.classList.add('hidden');
+        signupBtn.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+        welcomeSection.classList.remove('hidden');
+        contentSection.classList.add('hidden');
+        purchasedSection.classList.add('hidden');
+        if (currentUser.role === 'creator') {
+          creatorSection.classList.remove('hidden');
+        } else {
+          creatorSection.classList.add('hidden');
+        }
+      } else {
+        loginBtn.classList.remove('hidden');
+        signupBtn.classList.remove('hidden');
+        logoutBtn.classList.add('hidden');
+        welcomeSection.classList.remove('hidden');
+        contentSection.classList.add('hidden');
+        purchasedSection.classList.add('hidden');
+        creatorSection.classList.add('hidden');
+      }
+    }
+
+    // Initialize
+    currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+    console.log('Inicialização, currentUser:', currentUser);
+    console.log('Lista de usuários inicial:', users);
+    updateUI();
+  </script>
+</body>
+</html>
